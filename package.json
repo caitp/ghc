@@ -1,0 +1,16 @@
+{
+  "name": "ghc",
+  "version": "0.0.0",
+  "description": "A shell client for communicating with the GitHub API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caitlin Potter <caitpotter88@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "minimist": "^1.1.0",
+    "bluebird": "^2.2.2",
+    "lodash": "^2.4.1"
+  }
+}

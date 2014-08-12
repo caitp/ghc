@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+require('../src/cli.js').
+  CLImain(process.argv.slice(2));
