@@ -5,7 +5,7 @@ A shell client for communicating with the GitHub API.
 
 I frequently want to query GitHub to see what I've been doing lately on different repositories. The
 API is powerful, but using CURL to talk to it is a bit irritating. While it would be perfectly
-suitable to use [gh3](https://github.com/k33g/gh3) for talking to GitHub, I felt like using the raw
+suitable to use [node-github](https://github.com/ajaxorg/node-github) or [gh3](https://github.com/k33g/gh3) for talking to GitHub, I felt like using the raw
 Node.js http modules instead, to give me more to do.
 
 The goal is simple: query data from the GitHub API, in order to keep track of work being done by
