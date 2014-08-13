@@ -1,23 +1,31 @@
+require('./polyfill');
 var minimist = require('minimist');
 var pkg = require('./package');
 var ghc = require('./index');
+var log = require('./log');
 var commands = require('./commands');
 var Promise = require('bluebird');
 var _ = require('lodash');
 
 var opts = {
   boolean: [
+    'color',
     'oneline',
     'verbose',
     'version'
   ],
   string: [
-    'author'
+    'author',
+    'owner',
+    'repo'
   ],
   alias: {
     'oneline': ['1', 'short'],
     'verbose': 'V',
     'version': 'v'
+  },
+  default: {
+    'color': true
   },
   descriptions: {
     'Core': {
@@ -47,13 +55,6 @@ function GHC_CLI$$version() {
 function GHC_CLI$$options() {
   var lines = [];
 
-  function repeat(str, count) {
-    if (str.repeat) return str.repeat(count);
-    var result = '';
-    while (count-- > 0) result += str;
-    return result;
-  }
-
   function lineForDescription(name, descr) {
     var long = '--' + name;
     if (opts.alias[name]) {
@@ -66,7 +67,7 @@ function GHC_CLI$$options() {
       }
     }
     long += ':';
-    var line = '      ' + repeat(' ', 25 - long.length) + long + repeat(' ', 5);
+    var line = '      ' + ' '.repeat(25 - long.length) + long + ' '.repeat(5);
     lines.push(line + descr)
   }
 
@@ -106,7 +107,7 @@ function GHC_CLI$$help(topic) {
 var OWNER_REPO = /^(\S+)\/(\S+)$/;
 var OWNER_OR_REPO = /^(\S+)$/;
 
-function GHC_CLI$$main(argv) {
+function GHC_CLI$$main(argv, logOutput) {
   argv = (Array.isArray(argv) && argv) || [];
   var help = argv.indexOf('help');
   if (help < 0) help = argv.indexOf('--help');
@@ -121,61 +122,44 @@ function GHC_CLI$$main(argv) {
   var owner;
   var repo;
   var badarg;
-  var options = minimist(argv, _.defaults(opts, {
-    unknown: function(arg) {
-      var match = /^(--)?([\s\S]+)$/.exec(arg);
-      if (match) {
-        var cmd = match[2];
-        var iscmd = commands.LIST.indexOf(cmd) >= 0;
-        if (!command && iscmd) {
-          command = cmd;
-        } else if (!match[1]) {
-          if (match = OWNER_REPO.exec(arg)) {
-            owner = match[1];
-            repo = match[2];
-          } else if (OWNER_OR_REPO.test(arg)) {
-            if (!owner) owner = arg;
-            else repo = arg;
-          } else {
+  var options;
+  try {
+    options = minimist(argv, _.defaults(opts, {
+      unknown: function(arg) {
+        var match = /^(--?)?([\s\S]+)$/.exec(arg);
+        if (match) {
+          var cmd = match[2];
+          var iscmd = commands.LIST.indexOf(cmd) >= 0;
+          if (!command && iscmd) {
+            command = cmd;
+          } else if (!match[1]) {
+            if (match = OWNER_REPO.exec(arg)) {
+              owner = match[1];
+              repo = match[2];
+            } else if (OWNER_OR_REPO.test(arg)) {
+              if (!owner) owner = arg;
+              else repo = arg;
+            } else {
+              throw new Error('Unknown option `' + arg + '`');
+            }
+          } else if (!iscmd) {
             throw new Error('Unknown option `' + arg + '`');
           }
-        } else if (!iscmd) {
-          throw new Error('Unknown option `' + arg + '`');
         }
+        return false;
       }
-    }
-  });
+    }));
+  } catch (e) {
+    return Promise.reject(e);
+  }
 
   if (options.version) {
     return Promise.resolve(GHC_CLI$$version());
   }
 
-  var command = options.command || '';
-  commands.LIST.forEach(function(name) {
-    var i;
-    if ((i = options._.indexOf(name)) >= 0) {
-      options[name] = true;
-      options._.splice(i, 1);
-    }
-    if (options[name] && !command) command = name;
-    delete options[name];
-  });
-
-  if (command) {
-    options.command = command;
-  }
-
-  for (var i=0; i<options._.length; ++i) {
-    var opt = options._[i];
-    var match;
-    if (match = OWNER_REPO.exec(opt)) {
-      options.owner = match[1];
-      options.repo = match[2];
-    } else if (match = OWNER_OR_REPO.exec(opt)) {
-      if (options.owner) options.repo = match[1];
-      else options.owner = match[1];
-    }
-  }
+  if (!options.owner) options.owner = owner;
+  if (!options.repo) options.repo = repo;
+  if (command) options.command = command;
 
   for (var i=0; i<options._.length; ++i) {
     if (options._[i][0] === '-') {
@@ -184,21 +168,25 @@ function GHC_CLI$$main(argv) {
   }
 
   delete options._;
+  options.cli = true;
 
-  return ghc.run(options);
+  var p = ghc.run(options);
+  if (logOutput === true) {
+    p = p.
+      then(function(results) {
+        if (typeof results === 'string') log(options, results);
+        else if (Array.isArray(results)) log(options, results.join('\n'));
+        else log(options, JSON.stringify(results, null, 2));
+        return results;
+      }, function(error) {
+        throw error;
+      });
+  }
+  return p;
 }
 
 function GHC_CLI$$CLImain(argv) {
-  return GHC_CLI$$main(argv).
-    then(function(data) {
-      if (data) {
-        process.stdout.write('' + data + '\n');
-      }
-      process.exit(0);
-    }, function(error) {
-      process.stderr.write((error.message || error) + '\n');
-      process.exit(1);
-    });
+  return GHC_CLI$$main(argv, true);
 }
 
 exports.version = GHC_CLI$$version;
