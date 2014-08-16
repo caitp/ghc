@@ -9,10 +9,5 @@
   },
   "author": "Caitlin Potter <caitpotter88@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "minimist": "^1.1.0",
-    "bluebird": "^2.2.2",
-    "lodash": "^2.4.1",
-    "colors": "^0.6.2"
-  }
+  "dependencies": {}
 }
