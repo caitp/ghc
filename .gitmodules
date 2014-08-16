@@ -7,3 +7,6 @@
 [submodule "third_party/lodash"]
 	path = third_party/lodash
 	url = https://github.com/lodash/lodash
+[submodule "third_party/colors"]
+	path = third_party/colors
+	url = https://github.com/Marak/colors.js
