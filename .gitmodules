@@ -1,3 +1,0 @@
-[submodule "third_party/minimist"]
-	path = third_party/minimist
-	url = https://github.com/substack/minimist
