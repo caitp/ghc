@@ -1,11 +1,11 @@
 require('./polyfill');
-var minimist = require('minimist');
+var minimist = require('./third_party/minimist');
 var pkg = require('./package');
 var ghc = require('./index');
 var log = require('./log');
 var commands = require('./commands');
-var Promise = require('bluebird');
-var _ = require('lodash');
+var Promise = require('./third_party/bluebird');
+var _ = require('./third_party/lodash');
 
 var opts = {
   boolean: [

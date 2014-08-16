@@ -1,4 +1,4 @@
-var Promise = require('bluebird');
+var Promise = require('./third_party/bluebird');
 var _http = require('http');
 var _https;
 try { _https = require('https'); } catch (e) {};

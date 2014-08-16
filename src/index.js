@@ -1,7 +1,7 @@
 require('./polyfill');
-var Promise = require('bluebird');
+var Promise = require('./third_party/bluebird');
 var commands = require('./commands');
-var _ = require('lodash');
+var _ = require('./third_party/lodash');
 var log = require('./log');
 
 function GHC$$run(options) {

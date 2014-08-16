@@ -1,4 +1,4 @@
-var moment = require('moment');
+var moment = require('./third_party/moment');
 
 // The GitHub API appears to serve dates in the timezone of the requester, so there should be
 // little reason to manipulate these further. However, they do provide timezone information should

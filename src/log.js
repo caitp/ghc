@@ -1,4 +1,4 @@
-var colors = require('colors');
+var colors = require('./third_party/colors');
 var COLOR_RE = /%([^%]+)%([\s\S]*?)((%[\s\S]*?%)|$)/;
 
 function GHC$$log(options, stream) {
