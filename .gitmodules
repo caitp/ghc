@@ -4,3 +4,6 @@
 [submodule "third_party/bluebird"]
 	path = third_party/bluebird
 	url = https://github.com/petkaantonov/bluebird
+[submodule "third_party/lodash"]
+	path = third_party/lodash
+	url = https://github.com/lodash/lodash
