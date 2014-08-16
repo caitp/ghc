@@ -1,6 +1,3 @@
 [submodule "third_party/minimist"]
 	path = third_party/minimist
 	url = https://github.com/substack/minimist
-[submodule "third_party/bluebird"]
-	path = third_party/bluebird
-	url = https://github.com/petkaantonov/bluebird
