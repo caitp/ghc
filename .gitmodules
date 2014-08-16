@@ -7,6 +7,3 @@
 [submodule "third_party/colors"]
 	path = third_party/colors
 	url = https://github.com/Marak/colors.js
-[submodule "third_party/bluebird"]
-	path = third_party/bluebird
-	url = https://github.com/caitp/node-bluebird.git
