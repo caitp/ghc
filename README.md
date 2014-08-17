@@ -20,6 +20,28 @@ The client doesn't do much yet, but there's no reason it can't do more in the fu
 While it has currently just been quickly hacked together, tests and more functionality shall be
 added as needed, and it's open for anyone else to work on as they see fit.
 
+##Installation
+
++ Make sure you have node and npm installed and updated to current stable version.
+```bash
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+```
+if you want to update your current npm and nodejs [This is good link to click](http://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version).
+
++ Checkout the source from repo and install.
+```bash
+git clone https://github.com/caitp/ghc.git
+cd ghc
+sudo npm install -g .
+```
+
++ Example for running.
+```bash
+ghc commits caitp/ghc -1
+```
+
 ###License
 
 The MIT License (MIT)
