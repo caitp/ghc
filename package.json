@@ -4,6 +4,10 @@
   "description": "A shell client for communicating with the GitHub API",
   "bin": "./bin/ghc",
   "main": "index.js",
+  "repository" : {
+    "type": "git",
+    "url" : "http://github.com/caitp/ghc.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
