@@ -6,6 +6,7 @@ var log = require('./log');
 var commands = require('./commands');
 var Promise = require('./third_party/bluebird');
 var _ = require('./third_party/lodash');
+var HttpResponse = require('./http').Response;
 
 var opts = {
   boolean: [
@@ -179,7 +180,11 @@ function GHC_CLI$$main(argv, logOutput) {
         else log(options, JSON.stringify(results, null, 2));
         return results;
       }, function(error) {
-        throw error;
+        if (error instanceof HttpResponse) {
+          log.error(options, error.data.message || ('Error (' + error.status + ')'));
+        } else {
+          log.error(options, 'Error: ', error.message || error);
+        }
       });
   }
   return p;
