@@ -61,9 +61,6 @@ function GHC$$commits(options) {
     } else {
       return res.data;
     }
-  }).
-  catch(function(err) {
-    if (err instanceof Error) throw err;
   });
 }
 
