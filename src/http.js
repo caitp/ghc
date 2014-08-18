@@ -9,9 +9,10 @@ var moment = require('./third_party/moment');
 var ARRAY_BRACKET_REGEXP = /\[\]$/;
 var INT_REGEXP = /^\d+$/;
 
-function HttpResponse(res) {
+function HttpResponse(url, res) {
   this.status = res.statusCode;
   this.headers = res.headers;
+  this.url = url;
   this.data = '';
 };
 
@@ -200,7 +201,7 @@ function GHC$$httpRequest(options, request) {
     var http = (url.protocol === 'https' ? _http : _https);
     http.request(url, function(res) {
       res.setEncoding('utf8');
-      var response = new HttpResponse(res);
+      var response = new HttpResponse(origUrl, res);
 
       res.on('data', function(data) {
         response.data += data;
