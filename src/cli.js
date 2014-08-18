@@ -181,7 +181,8 @@ function GHC_CLI$$main(argv, logOutput) {
         return results;
       }, function(error) {
         if (error instanceof HttpResponse) {
-          log.error(options, error.data.message || ('Error (' + error.status + ')'));
+          log.error(options, error.data.message || ('Error (' + error.status + ')'),
+            '\n        ' + error.url + ' (' + error.status + ')');
         } else {
           log.error(options, 'Error: ', error.message || error);
         }
