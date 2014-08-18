@@ -9,6 +9,12 @@ var moment = require('./third_party/moment');
 var ARRAY_BRACKET_REGEXP = /\[\]$/;
 var INT_REGEXP = /^\d+$/;
 
+function HttpResponse(res) {
+  this.status = res.statusCode;
+  this.headers = res.headers;
+  this.data = '';
+};
+
 function buildURLParams(key, value, add) {
   var i, ii, name, v, classicArray = false;
   if (Array.isArray(value)) {
@@ -194,11 +200,7 @@ function GHC$$httpRequest(options, request) {
     var http = (url.protocol === 'https' ? _http : _https);
     http.request(url, function(res) {
       res.setEncoding('utf8');
-      var response = {
-        status: res.statusCode,
-        headers: res.headers,
-        data: ''
-      };
+      var response = new HttpResponse(res);
 
       res.on('data', function(data) {
         response.data += data;
@@ -219,5 +221,5 @@ function GHC$$httpRequest(options, request) {
 }
 
 GHC$$httpRequest.url = buildUrl;
-
+GHC$$httpRequest.Response = HttpResponse;
 module.exports = GHC$$httpRequest;
