@@ -22,7 +22,7 @@ function GHC$$commits$$oneline(commit) {
   var c = commit.commit;
   var author = pad.left((commit.author && commit.author.login) || '', 19) + ' ';
   var msg = pad.right(trim(c && c.message), 85);
-  var date = pad.right(calendar.short(c && c.date), 15);
+  var date = pad.right(calendar.short(c.committer.date), 15);
   var sha = pad.right((commit.sha || '').substr(0, 8), 10);
 
   return sha + author + msg + date;
