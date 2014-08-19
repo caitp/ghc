@@ -186,7 +186,7 @@ function GHC_CLI$$main(argv, logOutput) {
           log.error(options, error.data.message || ('Error (' + error.status + ')'),
             '\n        ' + error.url + ' (' + error.status + ')');
         } else {
-          log.error(options, 'Error: ', error.message || error);
+          log.error(options, error.message || error);
         }
       });
   }
