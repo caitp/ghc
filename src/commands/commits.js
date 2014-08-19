@@ -3,6 +3,7 @@ var log = require('../log');
 var calendar = require('../calendar');
 var trim = require('../trim');
 var pad = require('../pad');
+var Promise = require('../third_party/bluebird');
 
 function fullName(login, extra) {
   var name = (extra && extra.name) || '';
@@ -51,6 +52,11 @@ function GHC$$commits$$details(commit) {
 }
 
 function GHC$$commits(options) {
+  if (!options.owner || !options.repo) {
+    return Promise.reject('missing path to repository. Try specifying as ' +
+                          '`ghc commits <<username>>/<<repository>>`.');
+  }
+
   log.verbose(options, '%yellow%fetching commits for ' + options.owner + '/' + options.repo);
   return http(options, {
     command: 'commits'
