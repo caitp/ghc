@@ -194,7 +194,13 @@ function GHC_CLI$$main(argv, logOutput) {
 }
 
 function GHC_CLI$$CLImain(argv) {
-  return GHC_CLI$$main(argv, true);
+  return GHC_CLI$$main(argv, true).then(function(out) {
+    if (typeof out === 'string') {
+      log({}, out);
+    }
+  }, function(e) {
+    
+  });
 }
 
 exports.version = GHC_CLI$$version;
