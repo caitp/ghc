@@ -18,7 +18,9 @@ var opts = {
   string: [
     'author',
     'owner',
-    'repo'
+    'repo',
+    'since',
+    'until'
   ],
   alias: {
     'oneline': ['1', 'short'],

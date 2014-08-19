@@ -5,6 +5,7 @@ try { _https = require('https'); } catch (e) {};
 var url = require('url');
 var log = require('./log');
 var moment = require('./third_party/moment');
+var calendar = require('./calendar');
 
 var ARRAY_BRACKET_REGEXP = /\[\]$/;
 var INT_REGEXP = /^\d+$/;
@@ -57,12 +58,25 @@ function serializeURLParams(params) {
   return s.join('&').replace(/%20/, '+');
 }
 
+var SPEC_DATES = {
+  'now': calendar.now,
+  'today': calendar.today,
+  'yesterday': calendar.yesterday,
+  'lastweek': calendar.lastWeek,
+  'lastmonth': calendar.lastMonth,
+  'lastyear': calendar.lastYear
+};
+
 var FILTER_KEYS = {
-  'author': true
+  'author': true,
+  'since': true,
+  'until': true
 };
 
 var FILTER_TYPES = {
-  'author': 'string'
+  'author': 'string',
+  'since': 'date',
+  'until': 'date'
 };
 
 function params(options) {
@@ -95,6 +109,11 @@ function params(options) {
 
     switch (type) {
       case 'date':
+        var d;
+        if (typeof value === 'string' && SPEC_DATES.hasOwnProperty(d = value.toLowerCase())) {
+          params[key] = SPEC_DATES[d]();
+          break;
+        }
         if (typeof value === 'number' || typeof value === 'string' || typeof value === 'object') {
           value = moment(value);
           if (value.isValid()) {
